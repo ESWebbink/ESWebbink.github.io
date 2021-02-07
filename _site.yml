@@ -1,0 +1,14 @@
+name: "econ-website"
+navbar:
+  title: "Facets"
+  left:
+    - text: "Home"
+      href: index.html
+  right: 
+    - icon: fa-envelope fa-lg
+      href: mailto:<eswebbink@gmail.com>
+    - icon: fa-github fa-lg
+      href: http://github.com/ESWebbink
+output:
+  html_document:
+    theme: readable
