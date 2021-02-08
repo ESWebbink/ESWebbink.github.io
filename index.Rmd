@@ -1,0 +1,71 @@
+---
+title: "Testing Stuff"
+author: "ESWebbink"
+date: "2/7/2021"
+
+---
+
+This is a plot
+
+<--! img src="plots/facet_pop.jpeg" style="width:50%"-->
+
+This is another plot
+
+<--! img src="plots/gdp_gap.jpeg" style="width:50%"-->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+knitr::kable(summary(cars))
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE, message=FALSE}
+library(plotly)
+library(tidyverse)
+library(readr)
+
+# Read in data
+df_q_gdp <- read_tsv("data/Facets_Quarterly.csv")
+
+# transform data
+df_q_gdp$rgdp_pot_nsa_q <- .25 * df_q_gdp$rgdp_pot_nsa
+df_q_gdp$gdp_gap <- 100 * ((df_q_gdp$rgdp_nsa - df_q_gdp$rgdp_pot_nsa_q) / df_q_gdp$rgdp_nsa)
+
+# graphs
+
+p <- ggplot(data = df_q_gdp, aes(x = DATE, y = rgdp_pctch_qa_sa)) +
+    geom_col(fill="darkorchid") +
+    theme(panel.background = element_rect(fill = "#eeeeee")) +
+    labs(title="Real GDP Growth over Prior Quarter Potential", 
+         y="% of Potential (+over/-underperforming)", 
+         x="Quarterly, Seasonally Adjusted, Annualized Rate", 
+         caption="Source: BEA") 
+
+plot <- htmltools::tagList()
+
+plot[[1]] <- as_widget(ggplotly(
+
+  p,
+  dynamicTicks = FALSE
+# source("scripts/facetsQGDP.R",
+#       verbose = TRUE)
+))
+
+plot
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
