@@ -1,0 +1,13 @@
+---
+title: "about"
+author: "ESWebbink"
+date: "2/10/2021"
+---
+
+This is a plot
+
+<--! img src="plots/facet_pop.jpeg" style="width:50%"-->
+
+This is another plot
+
+<--! img src="plots/gdp_gap.jpeg" style="width:50%"-->
