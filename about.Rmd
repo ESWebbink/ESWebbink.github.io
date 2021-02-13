@@ -1,13 +1,76 @@
 ---
 title: "about"
 author: "ESWebbink"
-date: "2/10/2021"
+date: "2/13/2021"
 ---
 
-This is a plot
+20210213 - Gap between Actual and Potential RGDP, nsa, and Capacity Utilization
 
-<--! img src="plots/facet_pop.jpeg" style="width:50%"-->
+```{r qgdp, figures-side, out.width="50%", message=FALSE, echo=FALSE}
 
-This is another plot
+library(tidyverse)
+library(plotly)
+library(readr)
 
-<--! img src="plots/gdp_gap.jpeg" style="width:50%"-->
+df_q_gdp <- read_tsv("data/Facets_Quarterly.csv")
+
+# transform data
+df_q_gdp$rgdp_pot_nsa_q <- .25 * df_q_gdp$rgdp_pot_nsa
+df_q_gdp$gdp_gap <- 100 * ((df_q_gdp$rgdp_nsa - df_q_gdp$rgdp_pot_nsa_q) /df_q_gdp$rgdp_nsa)
+```
+
+
+```{r qgdp_plots1, figures-side, out.width="25%", message=FALSE, echo=FALSE}
+
+# plots ####
+
+  ggplot(data = df_q_gdp, aes(x = DATE, y = rgdp_pctch_qa_sa)) +
+    geom_col(fill="darkorchid") +
+    theme(panel.background = element_rect(fill = "#eeeeee")) +
+    labs(title="Real GDP Growth over Prior Quarter Potential", 
+         y="% of Potential (+over/-underperforming)", x="Quarterly, Seasonally Adjusted, Annualized Rate", 
+         caption="Source: BEA")
+  
+  ggplot(data = df_q_gdp, aes(x = DATE, y = rgdp_pctch_ya_sa)) +
+    geom_col(fill="darkorchid") +
+    theme(panel.background = element_rect(fill = "#eeeeee")) +
+    labs(title="Real GDP Growth over Prior Year Potential", 
+         y="% of Potential (+over/-underperforming)", x="Quarterly, Seasonally Adjusted, Annualized Rate", 
+         caption="Source: BEA")
+  
+  ggplot(data = df_q_gdp, aes(x = DATE, y = gdp_gap)) +
+    geom_col(fill="darkorchid") +
+    theme(panel.background = element_rect(fill = "#eeeeee")) +
+    labs(title="Gap: Real GDP less Potential", 
+         y="% of Potential (+over/-underperforming)", x="Quarterly, Not Seasonally Adjusted", 
+         caption="Source: BEA")
+  
+  ggplot(data = df_q_gdp, aes(x = DATE, y = capacity_utilization)) +
+    geom_line(colour = "darkorchid") +
+    theme(panel.background = element_rect(fill = "#eeeeee")) +
+    labs(title="Capacity Utilization", 
+         y="Percent", x="Quarterly", 
+         caption="Source: BEA") +
+    labs(subtitle="Percent of Total Population")
+
+```
+
+```{r qgdp_plots2, figures-side, out.width="50%", out.height="25%",  message=FALSE, echo=FALSE}
+
+# plots ####
+
+  ggplot(data = df_q_gdp, aes(x = DATE, y = rgdp_pctch_qa_sa)) +
+    geom_col(fill="darkorchid") +
+    theme(panel.background = element_rect(fill = "#eeeeee")) +
+    labs(title="Real GDP Growth over Prior Quarter Potential", 
+         y="% of Potential (+over/-underperforming)", x="Quarterly, Seasonally Adjusted, Annualized Rate", 
+         caption="Source: BEA")
+  
+  ggplot(data = df_q_gdp, aes(x = DATE, y = rgdp_pctch_ya_sa)) +
+    geom_col(fill="darkorchid") +
+    theme(panel.background = element_rect(fill = "#eeeeee")) +
+    labs(title="Real GDP Growth over Prior Year Potential", 
+         y="% of Potential (+over/-underperforming)", x="Quarterly, Seasonally Adjusted, Annualized Rate", 
+         caption="Source: BEA")
+  
+```
