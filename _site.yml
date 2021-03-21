@@ -5,6 +5,8 @@ navbar:
   left:
     - text: "Home"
       href: index.html
+    - text: "Facets"
+      href: facets.html
     - text: "About"
       href: about.html
   right: 
@@ -15,3 +17,4 @@ navbar:
 output:
   html_document:
     theme: cosmo
+    
