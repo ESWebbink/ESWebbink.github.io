@@ -10,7 +10,7 @@ library(readr)
 # Truncate values, e.g. to 1 decimal point
 
 # Read in data
-df_q_gdp <- read_tsv("data/Facets_Quarterly.csv")
+df_q_gdp <- read_tsv("data/Facets_Quarterly.txt")
 
 # transform data
 df_q_gdp$rgdp_pot_nsa_q <- .25 * df_q_gdp$rgdp_pot_nsa

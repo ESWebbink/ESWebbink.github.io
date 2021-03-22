@@ -1,46 +1,270 @@
 ---
-title: "Testing Stuff"
+title: "Facets Home"
 author: "ESWebbink"
-date: "2/7/2021"
+date: "2/25/2021"
 ---
 
-## Plots - say what this is 
-### blah blah blah
+```{r general, figures-side, out.width="50%", fig.height=3.0, message=FALSE, echo=FALSE}
 
-```{r pressure, echo=FALSE, message=FALSE}
-library(plotly)
+# load libraries ####
 library(tidyverse)
+library(plotly)
 library(readr)
+library(knitr)
 
-# Read in data
-df_q_gdp <- read_tsv("data/Facets_Quarterly.csv")
+```
+*** 
+#### **Real Gross Domestic Product is the output of an economy adjusted for inflation in prices**
+##### Real GDP is shown annualized, but on a non seasonally adjusted basis given the unusual impact of CoVid.<br> Potential GDP is a smoother, seasonally adjusted estimate based on projected growth in productivity and working age population - a projection unlikely to have taken CoVid's impact into account as yet.
+<!-- | | -->
+<!-- | :-: | -->
+<!-- | *Real GDP in Billions of Chained 2012 Dollars at Annual Rates* | -->
+```{r gdp_plot, figures-side, out.width="100%", fig.height=3, message=FALSE, echo=FALSE, warning=FALSE}
 
-# transform data
-df_q_gdp$rgdp_pot_nsa_q <- .25 * df_q_gdp$rgdp_pot_nsa
-df_q_gdp$gdp_gap <- 100 * ((df_q_gdp$rgdp_nsa - df_q_gdp$rgdp_pot_nsa_q) / df_q_gdp$rgdp_nsa)
+# read in quarterly data ####
+df_q_gdp <- read_tsv("data/Facets_Quarterly.txt")
+# colnames(df_q_gdp)
 
-# graphs
+# change series names to make them more readable
+colnames(df_q_gdp) <- c("Yr_Mo", "Real_GDP_Ch_vs_Yr_Ago", "Real_GDP_Ch_vs_Prior_Qtr", "Population", "Capacity_Utilization", "Real_Potential_GDP", "Real_GDP")
+# colnames(df_q_gdp)
 
-p <- ggplot(data = df_q_gdp, aes(x = DATE, y = rgdp_pctch_qa_sa)) +
-    geom_col(fill="darkorchid") +
-    theme(panel.background = element_rect(fill = "#eeeeee")) +
-    labs(title="Real GDP Growth over Prior Quarter Potential", 
-         y="% of Potential (+over/-underperforming)", 
-         x="Quarterly, Seasonally Adjusted, Annualized Rate", 
-         caption="Source: BEA") 
+# Drop all rows where [real/not potential] GDP = NA
+df_q_gdp <- df_q_gdp[is.na(df_q_gdp$Real_GDP)==FALSE,]
 
-plot <- htmltools::tagList()
+# transform data so both series are in annual terms
+df_q_gdp$Real_GDP_Annualized <- 4 * df_q_gdp$Real_GDP
 
-plot[[1]] <- as_widget(ggplotly(
+# subset GDP Real & Potential $Billions, then flip the frame - to draw a 2-line chart
+df_q_billion <- df_q_gdp[,c("Yr_Mo", "Real_Potential_GDP","Real_GDP_Annualized")]
+df_q_flip <- gather(df_q_billion, 
+                     key = "GDP", 
+                     value = "Bill_2012_Chain", 
+                     -Yr_Mo,
+                     na.rm=FALSE)
 
-  p,
-  dynamicTicks = FALSE
-# source("scripts/facetsQGDP.R",
-#       verbose = TRUE)
-))
+# plot the two variables on one line chart
+p1 <- ggplotly(
+  dynamicTicks = TRUE, 
+  originalData = FALSE,
+  ggplot(data = df_q_flip, 
+         aes(x=Yr_Mo, 
+             color=GDP, 
+             y=Bill_2012_Chain)) +
+    geom_line() + 
+    scale_colour_hue(l = 40, 
+                     h = c(160, 300) + 15,
+                     c = 100) +
+    theme(panel.background = element_rect(fill = "#eeeeee", colour = "grey"),
+          text = element_text(size=8),
+          legend.position = "left") +
+    labs(y="Billions of Dollars"),
+         title="Real GDP in Billions of Chained 2012 Dollars at Annual Rates")
+#    facet_wrap(~ GDP, nrow = 1)
+# )
 
-plot
+# var layout = {
+#   height: 230,
+#   width: 100,
+#   margin: {
+#     l: 60,
+#     r: 10,
+#     b: 0,
+#     t: 10,
+#     pad: 4
+#   }
+# };
+
+# Plotly.plot(p1, pieData, layout);
+
+p1
+# config(p1, displayModeBar = FALSE)
+ # layout(p1, margin = list(t = 0, r = 0, b = 0, l = 0, unit = "pt", pad = 0))
 
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+<!-- | | | | -->
+<!-- | :-: | :-: | :-: | -->
+<!-- | *Growth over Prior Qtr* | *Growth over Prior Yr* | *Capacity Utilization* | -->
+
+```{r gdpch_plots, figures-side, out.width="33%", fig.height=5, message=FALSE, echo=FALSE}
+
+# q plots ####
+  
+  ggplot(data = df_q_gdp, aes(x = Yr_Mo, y = Real_GDP_Ch_vs_Prior_Qtr)) +
+    geom_line(colour = "darkorchid") +
+    theme(panel.background = element_rect(fill = "#eeeeee"), 
+          text = element_text(size = 18)) +
+    labs(y="Percent",
+         x="Year/Qtr",
+         title="Growth over Prior Qtr") +
+    ylim(min = min(df_q_gdp$Real_GDP_Ch_vs_Yr_Ago, na.rm = TRUE),
+         max = max(df_q_gdp$Real_GDP_Ch_vs_Yr_Ago, na.rm = TRUE))
+  
+  ggplot(data = df_q_gdp, aes(x = Yr_Mo, y = Real_GDP_Ch_vs_Yr_Ago)) +
+    geom_line(colour = "darkorchid") +
+    theme(panel.background = element_rect(fill = "#eeeeee"),
+                    text = element_text(size = 18)) +
+    labs(y="Percent",
+         x="Year/Qtr",
+         title="Growth over Prior Yr") +
+    ylim(min = min(df_q_gdp$Real_GDP_Ch_vs_Yr_Ago, na.rm = TRUE),
+         max = max(df_q_gdp$Real_GDP_Ch_vs_Yr_Ago, na.rm = TRUE))
+
+  ggplot(data = df_q_gdp, aes(x = Yr_Mo, y = Capacity_Utilization)) +
+    geom_line(colour = "darkorchid") +
+    theme(panel.background = element_rect(fill = "#eeeeee"),
+          text = element_text(size = 18)) +
+    labs(y="Index",
+         x="Year/Qtr",
+         title="Capacity Utilization")
+  
+```
+
+*** 
+###### Real GDP Growth over Prior Quarter, Seasonally Adjusted Annualized Rate  
+###### Real GDP Growth over Prior Year, Seasonally Adjusted Annualized Rate  
+###### Real GDP Gap: 100 * (Real GDP - GDP Potential)/GDP Potential;  Source: Real Potential Gross Domestic Product - Billions of Chained 2012 Dollars - Not Seasonally Adjusted  
+###### Capacity Utilization: Total Index - Percent of Capacity - Seasonally Adjusted	G.17 Industrial Production and Capacity Utilization, Board of Governors of the Federal Reserve System (US)	For a given industry, the capacity utilization rate is equal to an output index divided by a capacity index. The Federal Reserve Board's capacity indexes attempt to capture the concept of sustainable maximum output-the greatest level of output a plant can maintain within the framework of a realistic work schedule, after factoring in normal downtime and assuming sufficient availability of inputs to operate the capital in place.  
+###### SOURCE: Employment Situation, U.S. Bureau of Labor Statistics
+*** 
+
+#### **The Unemployment Rate may be overstated by the *inclusion* of a growing elderly population     
+and understated by the *exclusion* of discouraged workers included in the working age population**
+
+```{r m_plots, figures-side, out.width="100%", fig.height=1.5, message=FALSE, echo=FALSE}
+
+# Prep steps from facetsM.R
+library(tidyverse)
+
+df_m <- read_tsv("data/Facets_Monthly.txt")
+# colnames(df_m)
+
+# change series names to make them more readable
+colnames(df_m) <- c("Yr_Mo", "Avg_Weekly_Hours", "Avg_Hrly_Earnings", "Population_over16", "CPI_All_Urban_All_Items", "CPI_All_Urban_All_Items_ex_Food_Energy", "01_Year_Treasury", "10_Year_Treasury", "05_Year_Treasury", "Working_Age_Pop_16to65", "Civilian_Labor_Force_Level", "Unemployment_Level", "Not_In_Labor_Force", "PCE", "PCE_ex_Food_Energy", "Trimmed_Mean_PCE_Inflation_Rate", "Population", "Price_Pressures_Measure")
+# colnames(df_m)
+
+# Drop all rows where ??? = NA
+df_m <- df_m[is.na(df_m$Avg_Weekly_Hours)==FALSE,]
+
+# transform data
+df_m$Employment_Level <- df_m$Civilian_Labor_Force_Level - df_m$Unemployment_Level
+df_m$Labor_Force_Participation_Rate <- 100 * (df_m$Civilian_Labor_Force_Level / df_m$Population_over16)
+df_m$Unemployment_Rate <- 100 * df_m$Unemployment_Level / df_m$Civilian_Labor_Force_Level
+df_m$Unemployed_PctPop16 <- 100 * df_m$Unemployment_Level /df_m$Population_over16
+df_m$Employed_PctPop16 <- 100 * df_m$Employment_Level /df_m$Population_over16
+df_m$NotInLF_PctPop16 <- 100 * (df_m$Not_In_Labor_Force / df_m$Population_over16)
+df_m$Population_over65 <- df_m$Population_over16 - df_m$Working_Age_Pop_16to65
+df_m$Population_under16 <- df_m$Population - df_m$Civilian_Labor_Force_Level
+df_m$Population_under16_PctTotalPop <- 100 * (df_m$Population_under16 / df_m$Population)
+df_m$Population_over65_PctTotalPop <- 100 * (df_m$Population_over65 / df_m$Population)
+df_m$Population_16to65_PctTotalPop <- 100 - df_m$Population_under16_PctTotalPop - df_m$Population_over65_PctTotalPop
+
+# subset population percentages
+df_m_pct <- df_m[,c("Yr_Mo","Employed_PctPop16", "Unemployed_PctPop16",
+                    "NotInLF_PctPop16")]
+
+# Reshape dataframe to graph multiple lines
+# need to convert multiple variable to single with multiple categories
+
+df_pop_cat <- gather(df_m_pct, 
+                     key = "Population", 
+                     value = "Percent", 
+                     -Yr_Mo,
+                     na.rm=FALSE)
+
+# Fix names in Population Column
+df_pop_cat$Population <- gsub("Employed_PctPop16", 
+                              "Employed", 
+                              df_pop_cat$Population)
+
+df_pop_cat$Population <- gsub("Unemployed_PctPop16", 
+                              "Unemployed", 
+                              df_pop_cat$Population)
+
+df_pop_cat$Population <- gsub("NotInLF_PctPop16", 
+                              "Not in Labor Force", 
+                              df_pop_cat$Population)
+
+# Make 'Population' an ordered factor
+df_pop_cat$Population <- ordered(df_pop_cat$Population,
+                                 levels = c("Employed",
+                                            "Not in Labor Force",
+                                            "Unemployed"))
+
+# plot: KEEP THIS ONE!!!!!!! ####
+
+ggplot(data = df_pop_cat,
+       aes(x=Yr_Mo,
+           color=Population,
+           y=Percent)) +
+  geom_line() +
+  scale_colour_hue(l = 40,
+                   h = c(160, 300) + 15,
+                   c = 100) +
+  theme(panel.background = element_rect(fill = "#eeeeee", colour = "grey"),
+        text = element_text(size=6) ) +
+  labs(y="Percent of Total") 
+
+```
+
+###### NOTE1: Monthly, Not Seasonally Adjusted 
+###### NOTE2: Population = Under 16 + Labor Force (i.e., Employed + Unemployed) + Over 16 Not in Labor Force
+###### SOURCE: Employment Situation, U.S. Bureau of Labor Statistics
+*** 
+
+#### **Population by Age**
+| | | | |
+|:-|:-|:-|:-|
+| *Real GDP Growth over Prior Quarter SAAR* | *Real GDP Growth over Prior Year SAAR* | *Real GDP % of Potential (+over/-underperforming) QSAAR* | *Capacity Utilization, SA* |
+
+
+<!-- | | | | | -->
+<!-- |:-|:-|:-|:-| -->
+<!-- | *Real GDP Growth over Prior Quarter SAAR* | *Real GDP Growth over Prior Year SAAR* | *Real GDP % of Potential (+over/-underperforming) QSAAR* | *Capacity Utilization, SA* | -->
+
+```{r monthly_plots1, figures-side, out.width="25%", fig.height=5, message=FALSE, echo=FALSE}
+# 
+# # m plots ####
+# 
+#   ggplot(data = df_monthly, aes(x = DATE, y = Unemployed_)) +
+#     geom_col(fill="darkorchid") +
+#     theme(panel.background = element_rect(fill = "#eeeeee"),
+#           text = element_text(size=20)) +
+#     labs(title="Unemployment", 
+#          y="Percent", x="Monthly", 
+#          caption="Source: Employment Situation, U.S. Bureau of Labor Statistics") +
+#     labs(subtitle="Percent of Labor Force") +
+#     expand_limits(, y=c(-40, 40))
+#   
+#   ggplot(data = df_monthly, aes(x = DATE, y = employedpct_over16)) +
+#     geom_col(fill="darkorchid") +
+#     theme(panel.background = element_rect(fill = "#eeeeee")) +
+#     labs(title="Real GDP Growth over Prior Year Potential",
+#          y="Percent", x="Monthly", 
+#          caption="Source: Employment Situation, U.S. Bureau of Labor Statistics") +
+#     labs(subtitle="Percent of Population Over 16")
+#   
+#   ggplot(data = df_monthly, aes(x = DATE, y = notinLFpct_over16)) +
+#     geom_col(fill="darkorchid") +
+#     theme(panel.background = element_rect(fill = "#eeeeee")) +
+#     labs(title="Not in Labor Force",
+#          y="Percent", x="Monthly", 
+#          caption="Source: Employment Situation, U.S. Bureau of Labor Statistics") +
+#     labs(subtitle="Percent of Population Over 16")
+#   
+#   ggplot(data = df_monthly, aes(x = DATE, y = unemployedpct_over16)) +
+#     geom_line(colour = "darkorchid") +
+#     theme(panel.background = element_rect(fill = "#eeeeee")) +
+#     labs(title="Unemployed", 
+#          y="Percent", x="Monthly", 
+#          caption="Source: Employment Situation, U.S. Bureau of Labor Statistics") +
+#     labs(subtitle="Percent of Population Over 16")
+
+```
+
+###### NOTE: Population = Under 16 + Labor Force (i.e., Employed + Unemployed) + Over 16 Not in Labor Force
+###### SOURCE: Employment Situation, U.S. Bureau of Labor Statistics
+***
+
+
