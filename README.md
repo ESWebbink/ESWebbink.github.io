@@ -12,10 +12,11 @@ Some economic indicators as a warning system to when the markets will go to hell
 ### How to update the vizecon site in RStudio:
 - Build
 - Build website
-- Git
-- Stage - check all boxes
-- Commit message - describe
-- Commit
+- Go to Git Tab upper right (Git Tab)
+- Stage i.e., check all file boxes
+- Click the commit button in the Git tab
+- Write a Commit message - describe using the imperative
+- Commit the Message
 - Close mini window
 - Push - green arrow
 - Close mini window
