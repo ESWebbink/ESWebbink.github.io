@@ -3,7 +3,7 @@
 library(fredr)
 library(readr)
 
-fred_indicators <- read_csv("FRED_Indicators.csv")
+fred_indicators <- read_csv("data/FRED_Indicators.csv")
 
 series1 <- fredr_series_observations(series_id = fred_indicators$Series_ID[1]) # "ND000334Q")
 
