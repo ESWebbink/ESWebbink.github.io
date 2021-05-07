@@ -1,0 +1,25 @@
+﻿Title,Series_ID,Vintage_Date,Units,Freq,Seas_Adj,Updated
+Real Gross Domestic Product,A191RL1Q225SBEA,Current,% Chg. from Preceding Period,Q,SAAR,4/29/21
+Real Gross Domestic Product,A191RO1Q156NBEA,Current,% Chg. from Qtr. 1 Yr. Ago,Q,SA,4/29/21
+Population,B230RC0Q173SBEA,Current,Thous.,Q,NSA,4/29/21
+Capacity Utilization: Total Index,CAPUTLB50001SQ,Current,% of Capacity,Q,SA,4/15/21
+"Average Weekly Hours of All Employees, Total Private",CEU0500000002,Current,Hours,M,NSA,4/2/21
+"Average Hourly Earnings of All Employees, Total Private",CEU0500000003,Current,$ per Hour,M,NSA,4/2/21
+Population Level,CNP16OV,Current,Thous. of Persons,M,NSA,4/2/21
+Consumer Price Index for All Urban Consumers: All Items in U.S. City Average,CPIAUCSL,Current,Index 1982-1984=100,M,SA,4/13/21
+Consumer Price Index for All Urban Consumers: All Items Less Food and Energy in U.S. City Average,CPILFESL,Current,Index 1982-1984=100,M,SA,4/13/21
+Real Potential Gross Domestic Product,GDPPOT,Current,Bil. of Chn. 2012 $,Q,NSA,2/1/21
+1-Year Treasury Constant Maturity Rate,GS1,Current,%,M,NSA,5/3/21
+10-Year Treasury Constant Maturity Rate,GS10,Current,%,M,NSA,5/3/21
+5-Year Treasury Constant Maturity Rate,GS5,Current,%,M,NSA,5/3/21
+Working Age Population: Aged 15-64: All Persons for the United States,LFWA64TTUSM647S,Current,Persons,M,SA,4/16/21
+Civilian Labor Force Level,LNU01000000,Current,Thous. of Persons,M,NSA,4/2/21
+Unemployment Level,LNU03000000,Current,Thous. of Persons,M,NSA,4/2/21
+Not in Labor Force,LNU05000000,Current,Thous. of Persons,M,NSA,4/2/21
+Real Gross Domestic Product,ND000334Q,Current,Bil. of Chn. 2012 $,Q,NSA,4/29/21
+Personal Consumption Expenditures: Chain-type Price Index,PCEPI,Current,Index 2012=100,M,SA,4/30/21
+Personal Consumption Expenditures Excluding Food and Energy (Chain-Type Price Index),PCEPILFE,Current,Index 2012=100,M,SA,4/30/21
+Trimmed Mean PCE Inflation Rate,PCETRIM1M158SFRBDAL,Current,% Chg. at Annual Rate,M,SA,4/30/21
+Population,POPTHM,Current,Thous.,M,NSA,4/30/21
+S&P 500,SP500,Current,Index,D,NSA,5/5/21
+Price Pressures Measure,STLPPM,Current,Probability,M,NSA,4/30/21

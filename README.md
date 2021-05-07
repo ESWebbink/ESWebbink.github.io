@@ -4,7 +4,7 @@ Some economic indicators as a warning system to when the markets will go to hell
 
 ### Data sources:
 - FRED - Published data list for [Selected Econ Indicators](https://research.stlouisfed.org/pdl/1446)
-- BEA
+- BEA - 
 - BLS
 - Census
 
