@@ -2,6 +2,7 @@
 
 library(fredr)
 library(readr)
+library(tidyr)
 
 fred_indicators <- read_csv("data/FRED_Indicators.csv")
 
@@ -22,7 +23,19 @@ for (i in 2:NROW(fred_indicators$Series_ID)) {
 # # Facets_Quarterly.txt headings:
 # [1] "DATE"            "A191RL1Q225SBEA" "A191RO1Q156NBEA" "B230RC0Q173SBEA"
 # [5] "CAPUTLB50001SQ"  "GDPPOT"          "ND000334Q" 
+quarterly_series <- c("A191RL1Q225SBEA", "A191RO1Q156NBEA", "B230RC0Q173SBEA",
+                      "CAPUTLB50001SQ", "GDPPOT", "ND000334Q")
+series1_quarterly <- series1[series1$series_id %in% quarterly_series,] 
+  
+facets_quarterly <- spread(series1_quarterly, key = series_id, value = value )
 
+colnames(facets_quarterly)[1] <- "DATE"
+
+write.table(facets_quarterly,
+            "data/Facets_Quarterly_API.txt",
+            sep = "\t",
+            na = "",
+            row.names = F)
 
 # fac_m <- read_tsv("data/Facets_Monthly.txt")
 # colnames(fac_m)  -- generated:

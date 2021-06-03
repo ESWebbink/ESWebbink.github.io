@@ -23,7 +23,7 @@ library(knitr)
 ```{r gdp_plot, figures-side, out.width="100%", fig.height=3, message=FALSE, echo=FALSE, warning=FALSE}
 
 # read in quarterly data ####
-df_q_gdp <- read_tsv("data/Facets_Quarterly.txt")
+df_q_gdp <- read_tsv("data/Facets_Quarterly_API.txt")
 # colnames(df_q_gdp)
 
 # change series names to make them more readable
