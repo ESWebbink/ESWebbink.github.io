@@ -6,9 +6,9 @@ library(tidyr)
 
 fred_indicators <- read_csv("data/FRED_Indicators.csv")
 
-# 1 - request API key at https://fredaccount.stlouisfed.org/apikey
-# 2 - set FRED_API_KEY in .Renviron
-# 3 - if newly set key, restart R session to reload .Renviron file
+# 1 - Request API key at https://fredaccount.stlouisfed.org/apikey
+# 2 - Set FRED_API_KEY in .Renviron
+# 3 - In RStudio, go to Session -> Restart R to reload .Renviron file
 fredr_set_key(Sys.getenv("FRED_API_KEY"))
 
 series1 <- fredr_series_observations(series_id = fred_indicators$Series_ID[1]) # "ND000334Q")
