@@ -1,0 +1,6 @@
+# 1 - Request API key at https://fredaccount.stlouisfed.org/apikey
+# 2 - In this text file, set FRED_API_KEY="[paste FRED API key here]"
+# 3 - Resave this text file as ".Renviron"
+# 3 - In RStudio, go to "Session" --> "Restart R" to reload .Renviron file
+
+FRED_API_KEY="abc123def456"
