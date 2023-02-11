@@ -6,6 +6,11 @@ library(tidyr)
 
 fred_indicators <- read_csv("data/FRED_Indicators.csv")
 
+# 1 - request API key at https://fredaccount.stlouisfed.org/apikey
+# 2 - set FRED_API_KEY in .Renviron
+# 3 - if newly set key, restart R session to reload .Renviron file
+fredr_set_key(Sys.getenv("FRED_API_KEY"))
+
 series1 <- fredr_series_observations(series_id = fred_indicators$Series_ID[1]) # "ND000334Q")
 
 for (i in 2:NROW(fred_indicators$Series_ID)) {
@@ -30,6 +35,9 @@ series1_quarterly <- series1[series1$series_id %in% quarterly_series,]
 facets_quarterly <- spread(series1_quarterly, key = series_id, value = value )
 
 colnames(facets_quarterly)[1] <- "DATE"
+
+drop_cols <- c("realtime_start", "realtime_end")
+facets_quarterly <- facets_quarterly[,!colnames(facets_quarterly) %in% drop_cols]
 
 write.table(facets_quarterly,
             "data/Facets_Quarterly_API.txt",
