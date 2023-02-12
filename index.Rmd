@@ -138,7 +138,7 @@ and understated by the *exclusion* of discouraged workers included in the workin
 # Prep steps from facetsM.R
 library(tidyverse)
 
-df_m <- read_tsv("data/Facets_Monthly.txt")
+df_m <- read_tsv("data/Facets_Monthly_API.txt")
 # colnames(df_m)
 
 # change series names to make them more readable
@@ -224,43 +224,35 @@ ggplot(data = df_pop_cat,
 <!-- |:-|:-|:-|:-| -->
 <!-- | *Real GDP Growth over Prior Quarter SAAR* | *Real GDP Growth over Prior Year SAAR* | *Real GDP % of Potential (+over/-underperforming) QSAAR* | *Capacity Utilization, SA* | -->
 
-```{r monthly_plots1, figures-side, out.width="25%", fig.height=5, message=FALSE, echo=FALSE}
-# 
+```{r monthly_plots1, figures-side, out.width="33%", fig.height=5, message=FALSE, echo=FALSE}
+
 # # m plots ####
-# 
-#   ggplot(data = df_monthly, aes(x = DATE, y = Unemployed_)) +
-#     geom_col(fill="darkorchid") +
-#     theme(panel.background = element_rect(fill = "#eeeeee"),
-#           text = element_text(size=20)) +
-#     labs(title="Unemployment", 
-#          y="Percent", x="Monthly", 
-#          caption="Source: Employment Situation, U.S. Bureau of Labor Statistics") +
-#     labs(subtitle="Percent of Labor Force") +
-#     expand_limits(, y=c(-40, 40))
-#   
-#   ggplot(data = df_monthly, aes(x = DATE, y = employedpct_over16)) +
-#     geom_col(fill="darkorchid") +
-#     theme(panel.background = element_rect(fill = "#eeeeee")) +
-#     labs(title="Real GDP Growth over Prior Year Potential",
-#          y="Percent", x="Monthly", 
-#          caption="Source: Employment Situation, U.S. Bureau of Labor Statistics") +
-#     labs(subtitle="Percent of Population Over 16")
-#   
-#   ggplot(data = df_monthly, aes(x = DATE, y = notinLFpct_over16)) +
-#     geom_col(fill="darkorchid") +
-#     theme(panel.background = element_rect(fill = "#eeeeee")) +
-#     labs(title="Not in Labor Force",
-#          y="Percent", x="Monthly", 
-#          caption="Source: Employment Situation, U.S. Bureau of Labor Statistics") +
-#     labs(subtitle="Percent of Population Over 16")
-#   
-#   ggplot(data = df_monthly, aes(x = DATE, y = unemployedpct_over16)) +
-#     geom_line(colour = "darkorchid") +
-#     theme(panel.background = element_rect(fill = "#eeeeee")) +
-#     labs(title="Unemployed", 
-#          y="Percent", x="Monthly", 
-#          caption="Source: Employment Situation, U.S. Bureau of Labor Statistics") +
-#     labs(subtitle="Percent of Population Over 16")
+
+  ggplot(data = df_m, aes(x = Yr_Mo, y = Unemployed_PctPop16)) +
+    theme(panel.background = element_rect(fill = "#eeeeee"),
+          text = element_text(size=20)) +
+    labs(title="Unemployment",
+         y="Percent", x="Monthly",
+         caption="Source: Employment Situation, U.S. Bureau of Labor Statistics") +
+    labs(subtitle="Percent of Labor Force") +
+    geom_ribbon(aes(ymin=min(Unemployed_PctPop16)-1, ymax=Unemployed_PctPop16), fill="darkorchid")
+
+  ggplot(data = df_m, aes(x = Yr_Mo, y = Employed_PctPop16)) +
+    theme(panel.background = element_rect(fill = "#eeeeee")) +
+    labs(title="Real GDP Growth over Prior Year Potential",
+         y="Percent", x="Monthly",
+         caption="Source: Employment Situation, U.S. Bureau of Labor Statistics") +
+    labs(subtitle="Percent of Population Over 16") +
+    geom_ribbon(aes(ymin=min(Employed_PctPop16)-1, ymax=Employed_PctPop16), fill="darkorchid")
+
+  ggplot(data = df_m, aes(x = Yr_Mo, y = NotInLF_PctPop16)) +
+    theme(panel.background = element_rect(fill = "#eeeeee")) +
+    labs(title="Not in Labor Force",
+         y="Percent", x="Monthly",
+         caption="Source: Employment Situation, U.S. Bureau of Labor Statistics") +
+    labs(subtitle="Percent of Population Over 16") + 
+    geom_ribbon(aes(ymin=min(NotInLF_PctPop16)-1, ymax=NotInLF_PctPop16), fill="darkorchid")
+
 
 ```
 
