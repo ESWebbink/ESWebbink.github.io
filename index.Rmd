@@ -1,7 +1,7 @@
 ---
 title: "Facets Home"
 author: "ESWebbink"
-date: "6/3/2021"
+date: "2/12/2023"
 ---
 
 
@@ -214,16 +214,13 @@ ggplot(data = df_pop_cat,
 ###### SOURCE: Employment Situation, U.S. Bureau of Labor Statistics
 *** 
 
-#### **Population by Age**
-| | | | |
-|:-|:-|:-|:-|
-| *Real GDP Growth over Prior Quarter SAAR* | *Real GDP Growth over Prior Year SAAR* | *Real GDP % of Potential (+over/-underperforming) QSAAR* | *Capacity Utilization, SA* |
-
-
+<!-- #### **Population by Age** -->
 <!-- | | | | | -->
 <!-- |:-|:-|:-|:-| -->
 <!-- | *Real GDP Growth over Prior Quarter SAAR* | *Real GDP Growth over Prior Year SAAR* | *Real GDP % of Potential (+over/-underperforming) QSAAR* | *Capacity Utilization, SA* | -->
 
+
+<!-- #### **Employment** -->
 ```{r monthly_plots1, figures-side, out.width="33%", fig.height=5, message=FALSE, echo=FALSE}
 
 # # m plots ####
