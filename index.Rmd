@@ -219,8 +219,8 @@ ggplot(data = df_pop_cat,
 <!-- |:-|:-|:-|:-| -->
 <!-- | *Real GDP Growth over Prior Quarter SAAR* | *Real GDP Growth over Prior Year SAAR* | *Real GDP % of Potential (+over/-underperforming) QSAAR* | *Capacity Utilization, SA* | -->
 
-<!-- #### **Employment** -->
 
+<!-- #### **Employment** -->
 ```{r monthly_plots1, figures-side, out.width="33%", fig.height=5, message=FALSE, echo=FALSE}
 
 # # m plots ####
