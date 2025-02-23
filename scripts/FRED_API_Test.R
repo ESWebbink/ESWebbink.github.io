@@ -38,7 +38,11 @@ quarterly_series <- colnames(fac_q)[2:NROW(colnames(fac_q))]
 
 series1_quarterly <- series1[series1$series_id %in% quarterly_series,] 
   
-facets_quarterly <- spread(series1_quarterly, key = series_id, value = value )
+facets_quarterly <- pivot_wider(series1_quarterly, 
+                                id_cols = date,
+                                names_from = series_id, 
+                                values_from = value )
+
 
 colnames(facets_quarterly)[1] <- "DATE"
 
@@ -76,12 +80,16 @@ monthly_series <- colnames(fac_m)[2:NROW(colnames(fac_m))]
 
 series1_monthly <- series1[series1$series_id %in% monthly_series,] 
 
-facets_monthly <- spread(series1_monthly, key = series_id, value = value )
+facets_monthly <- pivot_wider(series1_monthly,
+                              id_cols = date,
+                              names_from = series_id, 
+                              values_from = value )
 
 colnames(facets_monthly)[1] <- "DATE"
 
 drop_cols <- c("realtime_start", "realtime_end")
-facets_monthly <- facets_monthly[,!colnames(facets_monthly) %in% drop_cols]
+facets_monthly <- facets_monthly[order(facets_monthly$DATE),
+                                 !colnames(facets_monthly) %in% drop_cols]
 
 if (!FALSE %in% c(colnames(fac_m)==colnames(facets_monthly))) {
   
