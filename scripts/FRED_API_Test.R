@@ -11,11 +11,24 @@ fred_indicators <- read_csv("data/FRED_Indicators.csv")
 # 3 - In RStudio, go to Session -> Restart R to reload .Renviron file
 fredr_set_key(Sys.getenv("FRED_API_KEY"))
 
-series1 <- fredr_series_observations(series_id = fred_indicators$Series_ID[1]) # "ND000334Q")
+# # # # # # # # # # # # # # # # # # # # # # # # #
+# Add more employment stats monthly series:
+# # NON-FARM EMPLOYEES ‘000s of persons: U.S. Bureau of Labor Statistics - Employment Situation Report - Seasonally Adjusted
 
-for (i in 2:NROW(fred_indicators$Series_ID)) {
+fred_indicators_list <- c(fred_indicators$Series_ID, 
+                          "PAYEMS", # - Total
+                          "USPRIV", # - Private
+                          "USGOVT", # - Government
+                          "CES9091000001", # - Federal
+                          "CES9092000001", # - State
+                          "CES9093000001" # - Local
+                          )
+
+series1 <- fredr_series_observations(series_id = fred_indicators_list[1]) # "ND000334Q")
+
+for (i in 2:NROW(fred_indicators_list)) {
   
-  series_temp <- fredr_series_observations(series_id = fred_indicators$Series_ID[i])
+  series_temp <- fredr_series_observations(series_id = fred_indicators_list[i])
   
   series1 <- rbind(series1, series_temp)
   
@@ -53,7 +66,7 @@ facets_quarterly <- facets_quarterly[,!colnames(facets_quarterly) %in% drop_cols
 if (!FALSE %in% c(colnames(fac_q)==colnames(facets_quarterly))) {
   
   write.table(facets_quarterly,
-              "data/Facets_Quarterly_API.txt",
+              "data/Facets_Quarterly_APIb.txt",
               sep = "\t",
               na = "",
               row.names = F)
@@ -76,7 +89,14 @@ fac_m <- read_tsv("data/Facets_Monthly.txt")
 
 # monthly_series <- c("CEU0500000002", "CEU0500000003", "CNP16OV", ...)
 
-monthly_series <- colnames(fac_m)[2:NROW(colnames(fac_m))]
+monthly_series <- c(colnames(fac_m)[2:NROW(colnames(fac_m))],
+                    "PAYEMS", # - Total
+                    "USPRIV", # - Private
+                    "USGOVT", # - Government
+                    "CES9091000001", # - Federal
+                    "CES9092000001", # - State
+                    "CES9093000001" # - Local
+                    )
 
 series1_monthly <- series1[series1$series_id %in% monthly_series,] 
 
@@ -91,10 +111,10 @@ drop_cols <- c("realtime_start", "realtime_end")
 facets_monthly <- facets_monthly[order(facets_monthly$DATE),
                                  !colnames(facets_monthly) %in% drop_cols]
 
-if (!FALSE %in% c(colnames(fac_m)==colnames(facets_monthly))) {
+if (!FALSE %in% c(c("DATE",monthly_series)==colnames(facets_monthly))) {
   
   write.table(facets_monthly,
-              "data/Facets_Monthly_API.txt",
+              "data/Facets_Monthly_APIb.txt",
               sep = "\t",
               na = "",
               row.names = F)
