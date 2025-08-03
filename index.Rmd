@@ -305,55 +305,55 @@ df_emp_govt <- df_emp_govt[is.na(df_emp_govt$Local_Employees)==FALSE,]
 # need to convert multiple variable to single with multiple categories
 
 df_emp_cat <- gather(df_emp, 
-                     key = "Population",
+                     key = "Total Employees",
                      value = "Count",
                      -Yr_Mo,
                      na.rm=FALSE)
 
 df_emp_govt_cat <- gather(df_emp_govt,
-                          key = "Population",
+                          key = "Gov Employees",
                           value = "Count",
                           -Yr_Mo,
                           na.rm=FALSE)
 
 # Fix names in Population Column
-df_emp_cat$Population <- gsub("Total_Nonfarm_Employees", 
+df_emp_cat$`Total Employees` <- gsub("Total_Nonfarm_Employees", 
                               "Total", 
-                              df_emp_cat$Population)
+                              df_emp_cat$`Total Employees`)
 
-df_emp_cat$Population <- gsub("Private_Employees", 
+df_emp_cat$`Total Employees` <- gsub("Private_Employees", 
                               "Private", 
-                              df_emp_cat$Population)
+                              df_emp_cat$`Total Employees`)
 
-df_emp_cat$Population <- gsub("Govt_Employees", 
+df_emp_cat$`Total Employees` <- gsub("Govt_Employees", 
                               "Government", 
-                              df_emp_cat$Population)
+                              df_emp_cat$`Total Employees`)
 
-df_emp_govt_cat$Population <- gsub("Govt_Employees", 
+df_emp_govt_cat$`Gov Employees` <- gsub("Govt_Employees", 
                               "Government", 
-                              df_emp_govt_cat$Population)
+                              df_emp_govt_cat$`Gov Employees`)
 
-df_emp_govt_cat$Population <- gsub("Federal_Employees", 
+df_emp_govt_cat$`Gov Employees` <- gsub("Federal_Employees", 
                               "Federal", 
-                              df_emp_govt_cat$Population)
+                              df_emp_govt_cat$`Gov Employees`)
 
-df_emp_govt_cat$Population <- gsub("State_Employees", 
+df_emp_govt_cat$`Gov Employees` <- gsub("State_Employees", 
                               "State", 
-                              df_emp_govt_cat$Population)
+                              df_emp_govt_cat$`Gov Employees`)
 
-df_emp_govt_cat$Population <- gsub("Local_Employees", 
+df_emp_govt_cat$`Gov Employees` <- gsub("Local_Employees", 
                               "Local", 
-                              df_emp_govt_cat$Population)
+                              df_emp_govt_cat$`Gov Employees`)
 
 # Make 'Population' an ordered factor
-df_emp_cat$Population <- ordered(df_emp_cat$Population,
+df_emp_cat$`Total Employees` <- ordered(df_emp_cat$`Total Employees`,
                                  levels = c("Total",
                                             "Private",
                                             "Government"
                                             ))
 
 # Make 'Population' an ordered factor
-df_emp_govt_cat$Population <- ordered(df_emp_govt_cat$Population,
+df_emp_govt_cat$`Gov Employees` <- ordered(df_emp_govt_cat$`Gov Employees`,
                                  levels = c("Government",
                                             "Federal",
                                             "State",
@@ -366,7 +366,7 @@ p_emp <- ggplotly(
   originalData = FALSE,
 ggplot(data = df_emp_cat,
        aes(x=Yr_Mo,
-           color=Population,
+           color=`Total Employees`,
            y=Count)) +
   geom_line() +
   scale_colour_hue(l = 40,
@@ -381,7 +381,7 @@ p_emp_govt <- ggplotly(
   originalData = FALSE,
 ggplot(data = df_emp_govt_cat,
        aes(x=Yr_Mo,
-           color=Population,
+           color=`Gov Employees`,
            y=Count)) +
   geom_line() +
   scale_colour_hue(l = 40,
