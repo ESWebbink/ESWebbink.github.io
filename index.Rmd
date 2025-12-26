@@ -1,7 +1,7 @@
 ---
 title: "Facets Home"
 author: "ESWebbink"
-date: "8/3/2025"
+date: "12/25/2025"
 ---
 
 
@@ -16,7 +16,7 @@ library(knitr)
 ```
 *** 
 #### **Real Gross Domestic Product is the output of an economy adjusted for inflation in prices**
-##### Real GDP is shown annualized, but on a non seasonally adjusted basis given the unusual impact of CoVid.<br> Potential GDP is a smoother, seasonally adjusted estimate based on projected growth in productivity and working age population - a projection unlikely to have taken CoVid's impact into account as yet.
+##### Real GDP is shown annualized, but on a non seasonally adjusted basis given the unusual impact of Covid.<br> Potential GDP is a smoother, seasonally adjusted estimate based on projected growth in productivity and working age population - a projection unlikely to have taken Covid's impact into account as yet.
 <!-- | | -->
 <!-- | :-: | -->
 <!-- | *Real GDP in Billions of Chained 2012 Dollars at Annual Rates* | -->
@@ -153,6 +153,7 @@ colnames(df_m) <- c("Yr_Mo", "Avg_Weekly_Hours", "Avg_Hrly_Earnings", "Populatio
 # Drop all rows where ??? = NA
 df_m <- df_m[is.na(df_m$Avg_Weekly_Hours)==FALSE,]
 
+df_m_bu <- df_m
 # transform data
 df_m$Employment_Level <- df_m$Civilian_Labor_Force_Level - df_m$Unemployment_Level
 df_m$Labor_Force_Participation_Rate <- 100 * (df_m$Civilian_Labor_Force_Level / df_m$Population_over16)
@@ -236,8 +237,9 @@ ggplot(data = df_pop_cat,
     labs(title="Unemployment",
          y="Percent", x="Monthly",
          caption="Source: Employment Situation, U.S. Bureau of Labor Statistics") +
-    labs(subtitle="Percent of Labor Force") +
-    geom_ribbon(aes(ymin=min(Unemployed_PctPop16)-1, ymax=Unemployed_PctPop16), fill="darkorchid")
+    labs(subtitle="Percent of Labor Force") + # geom_line()
+    geom_ribbon(aes(ymin=min(Unemployed_PctPop16, na.rm = T)-1, 
+                    ymax=Unemployed_PctPop16), fill="darkorchid")
 
   ggplot(data = df_m, aes(x = Yr_Mo, y = Employed_PctPop16)) +
     theme(panel.background = element_rect(fill = "#eeeeee")) +
@@ -245,7 +247,8 @@ ggplot(data = df_pop_cat,
          y="Percent", x="Monthly",
          caption="Source: Employment Situation, U.S. Bureau of Labor Statistics") +
     labs(subtitle="Percent of Population Over 16") +
-    geom_ribbon(aes(ymin=min(Employed_PctPop16)-1, ymax=Employed_PctPop16), fill="darkorchid")
+    geom_ribbon(aes(ymin=min(Employed_PctPop16, na.rm = T)-1,
+                    ymax=Employed_PctPop16), fill="darkorchid")
 
   ggplot(data = df_m, aes(x = Yr_Mo, y = NotInLF_PctPop16)) +
     theme(panel.background = element_rect(fill = "#eeeeee")) +
@@ -253,7 +256,8 @@ ggplot(data = df_pop_cat,
          y="Percent", x="Monthly",
          caption="Source: Employment Situation, U.S. Bureau of Labor Statistics") +
     labs(subtitle="Percent of Population Over 16") + 
-    geom_ribbon(aes(ymin=min(NotInLF_PctPop16)-1, ymax=NotInLF_PctPop16), fill="darkorchid")
+    geom_ribbon(aes(ymin=min(NotInLF_PctPop16, na.rm=T)-1,
+                    ymax=NotInLF_PctPop16), fill="darkorchid")
 
 
 ```
